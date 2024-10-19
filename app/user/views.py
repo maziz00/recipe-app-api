@@ -1,7 +1,7 @@
 """
 Views from the user API.
 """
-from rest_frameword import generics
+from rest_framework import generics
 
 from user.serializers import UserSerializer
 
