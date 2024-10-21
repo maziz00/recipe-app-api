@@ -9,6 +9,7 @@ from rest_framework.test import APIClient
 from rest_framework import status
 
 CREATE_USER_URL = reverse('user:create')
+TOKEN_URL =reverse('user:token')
 
 def create_user(**params):
     """Create and return an new user."""
@@ -61,3 +62,21 @@ class PublicUserApiTests(TestCase):
             email=payload['email']
         ).exists()
         self.assertFalse(user_exists)
+
+    def test_create_token_for_user(self):
+        """Test generates token for valid credentials."""
+        user_details = {
+            'name': 'Test Name',
+            'email': 'tet@example.com',
+            'password': 'test-user-password123',
+        }
+        create_user(**user_details)
+
+        payload = {
+            'email': user_details['email'],
+            'password': user_details['password'],
+        }
+        res = self.client.post(TOKEN_URL, palyload)
+
+        self.assertIn('toke', res.data)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
