@@ -32,7 +32,7 @@ class AuthTokenSerializer(serializers.Serializer):
     def validate(self, attrs):
         """Valudate and authenticate the user."""
         email = attrs.get('email')
-        password = atts.get('password')
+        password = attrs.get('password')
         user = authenticate(
             request=self.context.get('request'),
             username=email,
