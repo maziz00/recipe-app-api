@@ -9,7 +9,7 @@ from rest_framework.test import APIClient
 from rest_framework import status
 
 CREATE_USER_URL = reverse('user:create')
-TOKEN_URL =reverse('user:token')
+TOKEN_URL = reverse('user:token')
 ME_URL = reverse('user:me')
 
 def create_user(**params):
@@ -123,7 +123,7 @@ class PrivateUserApiTests(TestCase):
         res = self.client.get(ME_URL)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqaul(res.data, {
+        self.assertEqual(res.data, {
             'name': self.user.name,
             'email': self.user.email,
         })
@@ -132,7 +132,7 @@ class PrivateUserApiTests(TestCase):
         """Test POST is not allowed for the meendpoint."""
         res = self.client.post(ME_URL, {})
 
-        self.assertEqual(res.status_code, status.HTTP_405_MEHTOD_NOT_ALLOWED)
+        self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_update_user_profile(self):
         """Test updating user profile for the authenticated user."""
@@ -142,4 +142,5 @@ class PrivateUserApiTests(TestCase):
 
         self.user.refresh_from_db()
         self.assertEqual(self.user.name, payload['name'])
+        self.assertTrue(self.user.check_password(payload['password']))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
