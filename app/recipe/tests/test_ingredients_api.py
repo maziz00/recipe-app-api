@@ -15,7 +15,7 @@ from recipe.serializers import IngredientSerializer
 INGREDIENTS_URL = reverse('recipe:ingredient-list')
 
 def detail_url(ingredient_id):
-    """Create and return" and ingredient detials URL."""
+    """Create and return an ingredient detail URL."""
     return reverse('recipe:ingredient-detail', args=[ingredient_id])
 
 
@@ -82,11 +82,11 @@ class PrivateIngredientsApiTests(TestCase):
 
     def test_delete_ingredient(self):
         """Test deleting an ingredient."""
-        ingredient = Ingredient.objects.create(user = self.user, name="Lettuce")
+        ingredient = Ingredient.objects.create(user=self.user, name='Lettuce')
 
         url = detail_url(ingredient.id)
         res = self.client.delete(url)
 
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
-        ingredient = Ingredient.objects.filter(user=self.user)
+        ingredients = Ingredient.objects.filter(user=self.user)
         self.assertFalse(ingredients.exists())
