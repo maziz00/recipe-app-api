@@ -147,16 +147,16 @@ class PrivateRecipeApiTests(TestCase):
 
     def test_full_update(self):
         """Test full update of recipe."""
-        recipe =  create_recipe(
+        recipe = create_recipe(
             user=self.user,
             title='Sample recipe title',
-            link='https://example.com/recipe.pdf',
+            link='https://exmaple.com/recipe.pdf',
             description='Sample recipe description',
         )
 
         payload = {
             'title': 'New recipe title',
-            'link': 'https://example.com/recipe.pdf',
+            'link': 'https://example.com/new-recipe.pdf',
             'description': 'New recipe description',
             'time_minutes': 10,
             'price': Decimal('2.50'),
@@ -303,7 +303,7 @@ class PrivateRecipeApiTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         recipes = Recipe.objects.filter(user=self.user)
-        self.assertEqual(recipe.count(), 1)
+        self.assertEqual(recipes.count(), 1)
         recipe = recipes[0]
         self.assertEqual(recipe.ingredients.count(), 2)
         for ingredient in payload['ingredients']:
@@ -319,7 +319,7 @@ class PrivateRecipeApiTests(TestCase):
         payload = {
             'title': 'Vietnamese Soup',
             'time_minutes': 25,
-            'price': Decimal('2.55'),
+            'price': '2.55',
             'ingredients': [{'name': 'Lemon'}, {'name': 'Fish Sauce'}],
         }
         res = self.client.post(RECIPES_URL, payload, format='json')
@@ -327,7 +327,7 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         recipes = Recipe.objects.filter(user=self.user)
         self.assertEqual(recipes.count(), 1)
-        recipes = recipes[0]
+        recipe = recipes[0]
         self.assertEqual(recipe.ingredients.count(), 2)
         self.assertIn(ingredient, recipe.ingredients.all())
         for ingredient in payload['ingredients']:
