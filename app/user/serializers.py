@@ -37,12 +37,12 @@ class AuthTokenSerializer(serializers.Serializer):
     """Serializer for the user auth token."""
     email = serializers.EmailField()
     password = serializers.CharField(
-        style={'imput_type': 'password'},
+        style={'input_type': 'password'},
         trim_whitespace=False,
     )
 
     def validate(self, attrs):
-        """Valudate and authenticate the user."""
+        """Validate and authenticate the user."""
         email = attrs.get('email')
         password = attrs.get('password')
         user = authenticate(
@@ -51,7 +51,7 @@ class AuthTokenSerializer(serializers.Serializer):
             password=password,
         )
         if not user:
-            msg = _('Unable to authenticate with provided cerdentials.')
+            msg = _('Unable to authenticate with provided crddentials.')
             raise serializers.ValidationError(msg, code='authorization')
 
         attrs['user'] = user
